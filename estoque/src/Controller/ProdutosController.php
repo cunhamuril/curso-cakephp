@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ProdutosController extends AppController
 {
@@ -43,5 +44,30 @@ class ProdutosController extends AppController
     $produto = $produtosTable->newEntity();
 
     $this->set('produto', $produto);
+  }
+
+  public function salva()
+  {
+    $produtosTable = TableRegistry::get('Produtos');
+
+    $produto = $produtosTable->newEntity($this->request->data());
+
+    if ($produtosTable->save($produto)) {
+      $msg = "Produto salvo com sucesso !";
+    } else {
+      $msg = "Erro ao salvar o produto";
+    }
+
+    $this->set('msg', $msg);
+  }
+
+  public function editar($id)
+  {
+    $produtosTable = TableRegistry::get('Produtos');
+
+    $produto = $produtosTable->get($id);
+
+    $this->set('produto', $produto);
+    $this->render('novo');
   }
 }
